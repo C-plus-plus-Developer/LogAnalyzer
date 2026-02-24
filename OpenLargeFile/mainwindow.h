@@ -34,4 +34,4 @@ private:
     void displayContext(size_t pos);
 };
 
-#endif // MAINWINDOW_H
+#endif 
