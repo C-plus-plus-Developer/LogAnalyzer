@@ -102,7 +102,6 @@ void MainWindow::on_findWordConfirm_clicked()
     QSettings settings;
     settings.setValue("lastSearchWord", word);
 
-    // Ищем с самого начала файла (с позиции 0)
     size_t found = m_fileView.find(word.toStdString(), 0);
 
     if (found != std::string_view::npos) {
@@ -121,7 +120,6 @@ void MainWindow::on_buttonNext_clicked()
     std::string word = ui->enterFindWord->text().toStdString();
     if (word.empty()) return;
 
-    // Начинаем поиск СРАЗУ ПОСЛЕ текущего найденного слова
     size_t startSearch = m_currentPos + word.length();
 
     if (startSearch >= m_fileView.size()) {
@@ -151,7 +149,6 @@ void MainWindow::on_buttonPrev_clicked()
         return;
     }
 
-    // Ищем в обратную сторону от позиции ПЕРЕД текущим словом
     size_t found = m_fileView.rfind(word, m_currentPos - 1);
 
     if (found != std::string_view::npos) {
@@ -184,11 +181,9 @@ void MainWindow::displayContext(size_t pos)
 
     // Бегаем по тексту и ищем слово
     while (!cursor.isNull() && !cursor.atEnd()) {
-        // Ищем слово, начиная с текущей позиции курсора
         cursor = doc->find(target, cursor);
 
         if (!cursor.isNull()) {
-            // Если нашли - применяем формат к выделению
             cursor.mergeCharFormat(highlightFormat);
         }
     }
