@@ -20,19 +20,16 @@ int main() {
     std::vector<std::string> levels = {"INFO", "DEBUG", "TRACE", "WARN"};
     
     for (size_t i = 0; i < LINE_COUNT; ++i) {
-        // 1. Формируем строку
+        
         file << "[2023-10-27 10:00:" << (i % 60) << "] ";
         
-        // 2. Вставляем ошибку раз в 500 строк
         if (i % 500 == 0) {
             file << "[ERROR] Critical failure at module X processing transaction #" << i;
         } else {
-            // Обычная строка
             file << "[" << levels[i % 4] << "] Processed item number " << i 
                  << ". Everything is fine. User ID: " << (i * 123);
         }
 
-        // 3. Конец строки
         file << "\n";
     }
 
