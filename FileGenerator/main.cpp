@@ -6,7 +6,7 @@
 
 int main() {
     const std::string filename = "big_log.txt";
-    const size_t LINE_COUNT = 10'000'000; // 10 миллионов строк (~500-800 МБ)
+    const size_t LINE_COUNT = 10'000'000; 
     
     std::cout << "Generating " << filename << "..." << std::endl;
 
