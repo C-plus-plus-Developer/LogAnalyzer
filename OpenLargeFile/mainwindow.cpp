@@ -23,14 +23,11 @@ MainWindow::MainWindow(QWidget *parent)
         ui->enterFindWord->setText(lastWord);
     }
 
-    // Блокируем кнопки навигации при старте, так как файл не открыт
     ui->buttonNext->setEnabled(false);
     ui->buttonPrev->setEnabled(false);
 
-    //поле вывода только для чтения
     ui->outputFile->setReadOnly(true);
 
-    //шрифт как в консоли, чтобы логи выглядели ровно
     QFont font("Consolas");
     font.setStyleHint(QFont::Monospace);
     ui->outputFile->setFont(font);
@@ -41,23 +38,19 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//Подвердить путь
 void MainWindow::on_pathConfirm_clicked()
 {
-    //Настройка цвета кнопки если путь верный(зеленый)
     QString clickedStyleTrue =
         "QPushButton {"
         "   background-color: #4CAF50;"
         "   color: black;"
         "}";
-    //Если не верный то красный
     QString clickedStyleFalse =
         "QPushButton {"
         "   background-color: #FF0000;"
         "   color: black;"
         "}";
 
-    // Берем путь из поля enterPathFile
     QString path = ui->enterPathFile->text();
 
     if (m_file.is_open()) m_file.close();
@@ -69,7 +62,6 @@ void MainWindow::on_pathConfirm_clicked()
 
             ui->pathConfirm->setStyleSheet(clickedStyleTrue);
 
-            // Создаем view на весь файл
             m_fileView = std::string_view(m_file.data(), m_file.size());
             m_currentPos = 0;
 
@@ -78,7 +70,6 @@ void MainWindow::on_pathConfirm_clicked()
 
             ui->outputFile->setPlainText("Файл успешно открыт! Введите слово для поиска (например, ERROR).");
 
-            // Разблокируем кнопки
             ui->buttonNext->setEnabled(true);
             ui->buttonPrev->setEnabled(true);
         }
@@ -88,7 +79,6 @@ void MainWindow::on_pathConfirm_clicked()
     }
 }
 
-//Подвердить слово
 void MainWindow::on_findWordConfirm_clicked()
 {
     if (!m_file.is_open()) {
@@ -112,7 +102,6 @@ void MainWindow::on_findWordConfirm_clicked()
     }
 }
 
-//Кнопка далее
 void MainWindow::on_buttonNext_clicked()
 {
     if (!m_file.is_open()) return;
@@ -136,7 +125,7 @@ void MainWindow::on_buttonNext_clicked()
         QMessageBox::information(this, "Инфо", "Больше совпадений нет (Конец файла).");
     }
 }
-//Кнопка назад
+
 void MainWindow::on_buttonPrev_clicked()
 {
     if (!m_file.is_open()) return;
@@ -159,13 +148,10 @@ void MainWindow::on_buttonPrev_clicked()
     }
 }
 
-//Вывод текста
 void MainWindow::displayContext(size_t pos)
 {
-    // Берем 3 строки до и 5 после (через функцию в ErrorBlock.h)
     std::string_view ctx = getContext(m_fileView, pos, 3, 5);
     QString text = QString::fromUtf8(ctx.data(), ctx.size());
-    // Выводим
     ui->outputFile->setPlainText(QString::fromUtf8(ctx.data(), ctx.size()));
 
     QString target = ui->enterFindWord->text();
@@ -174,12 +160,10 @@ void MainWindow::displayContext(size_t pos)
     QTextDocument *doc = ui->outputFile->document();
     QTextCursor cursor(doc);
 
-    //Подсветка искомого слова
     QTextCharFormat highlightFormat;
     highlightFormat.setForeground(Qt::red);
     highlightFormat.setFontWeight(QFont::Bold);
 
-    // Бегаем по тексту и ищем слово
     while (!cursor.isNull() && !cursor.atEnd()) {
         cursor = doc->find(target, cursor);
 
