@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <boost/iostreams/device/mapped_file.hpp> // Для mmap
+#include <boost/iostreams/device/mapped_file.hpp> 
 #include <string_view>
 #include "ErrorBlock.h"
 
